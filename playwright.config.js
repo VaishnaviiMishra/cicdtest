@@ -11,8 +11,8 @@ const { defineConfig, devices } = require('@playwright/test');
  * @see https://playwright.dev/docs/test-configuration
  */
 module.exports = defineConfig({
-  timeout : 5 * 60 *1000,
-  
+  timeout: 5 * 60 * 1000,
+
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -23,14 +23,43 @@ module.exports = defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['html'],
+    ['allure-playwright']
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    // Attach screenshots and videos (useful for Allure)
+    screenshot: 'on',
+    video: 'on',
+
+    // Enable verbose API logging
+    actionTimeout: 30000,
+    navigationTimeout: 30000,
+    testIdAttribute: 'data-testid',
+
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://restful-booker.herokuapp.com',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+
+    // Additional tracing options
+    trace: {
+      mode: 'on-first-retry',
+      snapshots: true,
+      screenshots: true,
+      sources: true,
+      attachments: true
+    },
+    launchOptions: {
+      slowMo: 100
+    },
+    contextOptions: {
+      recordVideo: {
+        dir: 'videos/',
+        size: { width: 1280, height: 720 }
+      }
+    }
   },
 
   /* Configure projects for major browsers */
