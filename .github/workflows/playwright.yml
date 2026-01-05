@@ -87,7 +87,7 @@ jobs:
         password: ${{ secrets.MAIL_PASSWORD }}
         # Email Content
         subject: "Playwright Automated Test Report: ${{ github.repository }}"
-        to: client-email@example.com
+        to: vm9944377@gmail.com
         from: Vaishnavii Mishra <${{ secrets.MAIL_USERNAME }}>
         body: |
           Hello,
