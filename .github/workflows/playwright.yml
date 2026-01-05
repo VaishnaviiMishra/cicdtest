@@ -74,3 +74,31 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+
+    - name: Send mail
+      if: always()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        # SMTP server details (Example for Gmail)
+        server_address: smtp.gmail.com
+        server_port: 465
+        # Credentials (Stored in GitHub Secrets)
+        username: ${{ secrets.MAIL_USERNAME }}
+        password: ${{ secrets.MAIL_PASSWORD }}
+        # Email Content
+        subject: "Playwright Automated Test Report: ${{ github.repository }}"
+        to: client-email@example.com
+        from: Vaishnavii Mishra <${{ secrets.MAIL_USERNAME }}>
+        body: |
+          Hello,
+
+          The latest Playwright API tests have completed. 
+          
+          You can view the live interactive Allure report here:
+          https://vaishnaviimishra.github.io/cicdtest/
+
+          Status: ${{ job.status }}
+          Build URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Regards,
+          Automation Team
